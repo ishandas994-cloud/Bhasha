@@ -1,16 +1,16 @@
 // backend/src/main/java/com/banglalang/parser/Parser.java
 package com.banglalang.parser;
 
-import com.banglalang.ParseException;
 import com.banglalang.lexer.Token;
 import com.banglalang.lexer.TokenType;
 import com.banglalang.parser.ast.Expr;
+import com.banglalang.parser.ast.ParseException;
 import com.banglalang.parser.ast.Stmt;
+
+import static com.banglalang.lexer.TokenType.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.banglalang.lexer.TokenType.*;
 
 /**
  * Recursive-descent parser for BanglaLang. Consumes the flat Token list

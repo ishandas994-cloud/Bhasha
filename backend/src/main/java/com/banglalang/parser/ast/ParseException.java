@@ -1,5 +1,5 @@
 // backend/src/main/java/com/banglalang/parser/ParseException.java
-package com.banglalang.parser;
+package com.banglalang.parser.ast;
 
 /**
  * Thrown when the Parser encounters a token sequence that doesn't match
