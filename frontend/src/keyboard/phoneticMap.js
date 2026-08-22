@@ -131,7 +131,7 @@ export function transliterateWord(latinWord) {
 
   const matchAt = (keys, pos) => {
     for (const key of keys) {
-      if (input.slice(pos, pos + key.length).toLowerCase() === key.toLowerCase()) {
+      if (input.slice(pos, pos + key.length) === key) {
         return key;
       }
     }

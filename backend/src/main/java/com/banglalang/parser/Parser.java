@@ -80,7 +80,7 @@ public final class Parser {
             } while (match(COMMA));
         }
         consume(RIGHT_PAREN, "Expected ')' after parameters.");
-        consume(LEFT_BRACE, "Expected '{' before function body.");
+        if (!check(LEFT_BRACE)) throw error(peek(), "Expected '{' before function body.");
         List<Stmt> body = block();
 
         return new Stmt.Function(name, params, body);
