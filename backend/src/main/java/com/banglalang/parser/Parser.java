@@ -1,6 +1,7 @@
 // backend/src/main/java/com/banglalang/parser/Parser.java
 package com.banglalang.parser;
 
+import com.banglalang.ParseException;
 import com.banglalang.lexer.Token;
 import com.banglalang.lexer.TokenType;
 import com.banglalang.parser.ast.Expr;
