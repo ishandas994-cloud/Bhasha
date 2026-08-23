@@ -14,7 +14,7 @@ export default defineConfig({
     // dev origin (WebConfig.java handles that case too, as a backup).
     proxy: {
       "/api": {
-        target: "http://localhost:8080",
+        target: "http://localhost:8081",
         changeOrigin: true,
       },
     },
