@@ -1,0 +1,218 @@
+/* frontend/src/styles/index.css */
+
+:root {
+  --bg: #1e1e1e;
+  --bg-panel: #252526;
+  --bg-panel-alt: #2d2d30;
+  --border: #3c3c3c;
+  --text: #d4d4d4;
+  --text-dim: #8a8a8a;
+  --accent: #c678dd;
+  --accent-hover: #a855c7;
+  --success: #98c379;
+  --error: #e06c75;
+  --font-ui: "Segoe UI", "Noto Sans Bengali", system-ui, sans-serif;
+  --font-mono: "Fira Code", "Noto Sans Bengali", "Consolas", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ---- Header ---- */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.run-button {
+  background: var(--accent);
+  color: #1e1e1e;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.run-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.run-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---- Main layout: editor+keyboard on the left, output on the right ---- */
+
+.app-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .app-main {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+}
+
+.code-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* ---- Virtual keyboard ---- */
+
+.virtual-keyboard {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.vk-preview {
+  min-height: 32px;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+}
+
+.vk-preview-placeholder {
+  color: var(--text-dim);
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+}
+
+.vk-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.vk-key {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  background: var(--bg-panel-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.1s ease, transform 0.05s ease;
+}
+
+.vk-key:hover {
+  background: var(--accent);
+  color: #1e1e1e;
+}
+
+.vk-key:active {
+  transform: scale(0.95);
+}
+
+.vk-key-wide {
+  min-width: 90px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+}
+
+.vk-row-controls {
+  margin-top: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+/* ---- Output panel ---- */
+
+.output-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.output-panel-header {
+  padding: 10px 14px;
+  background: var(--bg-panel-alt);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.output-panel-body {
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.output-placeholder {
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.output-status {
+  color: var(--accent);
+}
+
+.output-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--success);
+  margin: 0 0 10px 0;
+}
+
+.output-error {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--error);
+  padding: 10px;
+  background: rgba(224, 108, 117, 0.1);
+  border: 1px solid var(--error);
+  border-radius: 6px;
+}
