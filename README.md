@@ -117,7 +117,7 @@ Make sure you have the following installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/bangla-lang.git
+git clone https://github.com/ishandas994-cloud/bangla-lang.git
 cd bangla-lang
 ```
 
