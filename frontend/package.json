@@ -1,0 +1,26 @@
+{
+  "name": "bangla-lang-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@uiw/react-codemirror": "^4.23.6",
+    "@codemirror/language": "^6.10.3",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.34.1",
+    "@codemirror/autocomplete": "^6.18.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@lezer/highlight": "^1.2.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "vite": "^5.4.8"
+  }
+}
