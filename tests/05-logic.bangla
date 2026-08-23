@@ -1,0 +1,15 @@
+# পরীক্ষা ০৫: logical operators with short-circuit evaluation
+লিখ সত্য && মিথ্যা;
+লিখ সত্য || মিথ্যা;
+লিখ !সত্য;
+
+# short-circuit proof: the right side would divide by zero and crash
+# if evaluated - the fact we see মিথ্যা / সত্য means it never ran
+লিখ মিথ্যা && (১ / ০ == ১);
+লিখ সত্য || (১ / ০ == ১);
+
+# comparison feeding into logic
+ধরি বয়স = ২০;
+যদি (বয়স > ১৮ && বয়স < ৩০) {
+    লিখ "যুবা";
+}

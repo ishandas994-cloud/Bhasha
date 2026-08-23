@@ -1,0 +1,112 @@
+# .github/workflows/release.yml
+#
+# Builds the BanglaLang CLI for all three platforms and attaches the
+# artifacts to a GitHub Release when a v* tag is pushed:
+#
+#   git tag v1.0.0 && git push origin v1.0.0
+#
+# Artifacts produced per platform:
+#   - bangla-lang-cli.jar          (pure Java, runs anywhere with Java 17+)
+#   - bangla-windows-x64.zip       self-contained, no Java needed
+#   - bangla-linux-x64.tar.gz      self-contained, no Java needed
+#   - bangla-macos-aarch64.tar.gz  self-contained, no Java needed
+
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch: # manual runs for testing the pipeline
+
+permissions:
+  contents: write # required to create the GitHub Release
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: bangla-windows-x64
+            compress: zip
+          - os: ubuntu-latest
+            artifact: bangla-linux-x64
+            compress: tar
+          - os: macos-latest
+            artifact: bangla-macos-aarch64
+            compress: tar
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build CLI jar
+        run: mvn -B -Pcli clean package -DskipTests
+
+      # The plain jar is platform-independent - publish it once.
+      - name: Upload jar artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bangla-lang-cli-jar
+          path: backend/target/bangla-lang-cli.jar
+
+      # jpackage bundles a trimmed JRE next to the jar, so users download
+      # ONE folder and need zero Java installed - the "gcc experience".
+      - name: Package native launcher
+        shell: bash
+        run: |
+          mkdir -p jpackage-input
+          cp target/bangla-lang-cli.jar jpackage-input/
+          jpackage \
+            --type app-image \
+            --name bangla \
+            --app-version "${GITHUB_REF_NAME#v}" \
+            --vendor "BanglaLang" \
+            --input jpackage-input \
+            --main-jar bangla-lang-cli.jar \
+            --dest target/dist
+
+      - name: Compress (Windows)
+        if: matrix.compress == 'zip'
+        shell: pwsh
+        run: Compress-Archive -Path target/dist/bangla -DestinationPath target/${{ matrix.artifact }}.zip -Force
+
+      - name: Compress (Linux/macOS)
+        if: matrix.compress == 'tar'
+        shell: bash
+        run: tar -czf target/${{ matrix.artifact }}.tar.gz -C target/dist bangla
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: backend/target/${{ matrix.artifact }}.*
+
+  release:
+    name: Attach binaries to GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/bangla-windows-x64.zip
+            artifacts/bangla-linux-x64.tar.gz
+            artifacts/bangla-macos-aarch64.tar.gz
+            artifacts/bangla-lang-cli.jar

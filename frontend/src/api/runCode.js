@@ -5,7 +5,14 @@
 // shape and error handling live in exactly one place - if the API
 // contract changes, this is the only file that needs to know.
 
-const RUN_ENDPOINT = "/api/run"; // proxied to http://localhost:8080 by vite.config.js in dev
+// Base URL of the backend. In production this comes from the VITE_API_URL
+// env var baked in at build time (set it in Vercel's project settings).
+// When unset (local dev), we fall back to a relative path, which Vite's
+// dev-server proxy (vite.config.js) forwards to http://localhost:8081 -
+// so local development needs zero configuration.
+const API_BASE = import.meta.env.VITE_API_URL ?? "";
+
+const RUN_ENDPOINT = `${API_BASE}/api/run`;
 
 /**
  * Sends BanglaLang source code to the backend and returns the parsed

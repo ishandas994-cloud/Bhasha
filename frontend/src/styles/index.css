@@ -13,6 +13,13 @@
   --error: #e06c75;
   --font-ui: "Segoe UI", "Noto Sans Bengali", system-ui, sans-serif;
   --font-mono: "Fira Code", "Noto Sans Bengali", "Consolas", monospace;
+
+  /* Neon palette for the virtual keyboard */
+  --neon-cyan: #00e5ff;
+  --neon-pink: #ff2ea6;
+  --neon-violet: #a06bff;
+  --neon-green: #3dffa2;
+  --neon-amber: #ffb84d;
 }
 
 * {
@@ -24,6 +31,38 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-ui);
+}
+
+/*
+ * Ambient neon light blobs behind the page. They exist so the keyboard's
+ * frosted-glass blur has actual color to refract - without them, glass
+ * over a flat dark background just looks like a plain dark panel.
+ */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  width: 46vw;
+  height: 46vw;
+  min-width: 460px;
+  min-height: 460px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+body::before {
+  top: -12%;
+  left: -10%;
+  background: radial-gradient(circle, var(--neon-cyan) 0%, transparent 70%);
+}
+
+body::after {
+  bottom: -14%;
+  right: -8%;
+  background: radial-gradient(circle, var(--neon-pink) 0%, transparent 70%);
 }
 
 .app {
@@ -98,78 +137,168 @@ body {
   padding-right: 2px;
 }
 
-/* ---- Virtual keyboard ---- */
+/* ---- Virtual keyboard (neon) ---- */
 
 .virtual-keyboard {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px;
+  background: linear-gradient(
+    165deg,
+    rgba(20, 26, 50, 0.5) 0%,
+    rgba(10, 13, 24, 0.62) 100%
+  );
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 229, 255, 0.32);
+  border-radius: 36px;
+  padding: 16px 18px;
   flex-shrink: 0;
+  animation: vk-neon-breathe 4s ease-in-out infinite;
+}
+
+@keyframes vk-neon-breathe {
+  0%, 100% {
+    box-shadow:
+      0 0 18px rgba(0, 229, 255, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  }
+  50% {
+    box-shadow:
+      0 0 28px rgba(0, 229, 255, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
 }
 
 .vk-section-label {
-  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--text-dim);
-  margin: 6px 2px 4px;
+  margin: 8px 2px 5px;
 }
 
-.vk-preview {
-  min-height: 32px;
-  padding: 6px 10px;
-  margin-bottom: 8px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
+.vk-section-label::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.vk-preview-placeholder {
-  color: var(--text-dim);
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
+.vk-label-vowels::before {
+  background: var(--neon-pink);
+  box-shadow: 0 0 7px var(--neon-pink);
+}
+
+.vk-label-signs::before {
+  background: var(--neon-violet);
+  box-shadow: 0 0 7px var(--neon-violet);
+}
+
+.vk-label-consonants::before {
+  background: var(--neon-cyan);
+  box-shadow: 0 0 7px var(--neon-cyan);
+}
+
+.vk-label-digits::before {
+  background: var(--neon-green);
+  box-shadow: 0 0 7px var(--neon-green);
+}
+
+.vk-label-symbols::before {
+  background: var(--neon-amber);
+  box-shadow: 0 0 7px var(--neon-amber);
 }
 
 .vk-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  margin-bottom: 4px;
+  gap: 5px;
+  margin-bottom: 5px;
 }
 
+/*
+ * Each key inherits its glow color from --key-glow, which the row
+ * containers override - one set of key styles, per-section hues.
+ */
 .vk-key {
-  min-width: 34px;
-  height: 34px;
-  padding: 0 8px;
-  background: var(--bg-panel-alt);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 5px;
+  --key-glow: var(--neon-cyan);
+
+  min-width: 36px;
+  height: 38px;
+  padding: 0 9px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--key-glow);
+  border: 1px solid color-mix(in srgb, var(--key-glow) 45%, transparent);
+  border-radius: 6px;
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.1s ease, transform 0.05s ease;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--key-glow) 70%, transparent);
+  box-shadow:
+    0 0 6px color-mix(in srgb, var(--key-glow) 14%, transparent),
+    inset 0 0 6px color-mix(in srgb, var(--key-glow) 7%, transparent);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.06s ease;
 }
 
 .vk-key:hover {
-  background: var(--accent);
-  color: #1e1e1e;
+  background: color-mix(in srgb, var(--key-glow) 13%, transparent);
+  border-color: var(--key-glow);
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--key-glow) 55%, transparent),
+    inset 0 0 10px color-mix(in srgb, var(--key-glow) 22%, transparent);
+  transform: translateY(-1px);
 }
 
 .vk-key:active {
-  transform: scale(0.95);
+  transform: scale(0.93);
+  box-shadow:
+    0 0 18px color-mix(in srgb, var(--key-glow) 80%, transparent),
+    inset 0 0 12px color-mix(in srgb, var(--key-glow) 38%, transparent);
+}
+
+.vk-key:focus-visible {
+  outline: 1px solid var(--key-glow);
+  outline-offset: 2px;
+}
+
+/* Per-row neon hues */
+.vk-row-vowels {
+  --key-glow: var(--neon-pink);
+}
+
+.vk-row-signs {
+  --key-glow: var(--neon-violet);
+}
+
+.vk-row-consonants {
+  --key-glow: var(--neon-cyan);
+}
+
+.vk-row-digits {
+  --key-glow: var(--neon-green);
+}
+
+.vk-row-symbols {
+  --key-glow: var(--neon-amber);
 }
 
 .vk-key-wide {
-  min-width: 90px;
+  min-width: 96px;
   font-family: var(--font-ui);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
 }
 
 .vk-row-controls {
+  --key-glow: #e8ecf5;
   margin-top: 6px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(0, 229, 255, 0.18);
   padding-top: 8px;
 }
 

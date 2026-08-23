@@ -1,0 +1,19 @@
+# পরীক্ষা ১২: scoping - blocks, shadowing, assignment
+
+ধরি x = ১;
+
+{
+    # ধরি inside a block declares a NEW variable that shadows the outer one
+    ধরি x = ২;
+    লিখ x;
+}
+
+# the outer x is untouched
+লিখ x;
+
+# bare assignment (no ধরি) updates the existing variable
+ধরি y = ৫;
+যদি (সত্য) {
+    y = y + ১;
+}
+লিখ y;

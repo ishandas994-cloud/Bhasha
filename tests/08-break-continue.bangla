@@ -1,0 +1,23 @@
+# পরীক্ষা ০৮: থামো (break) and চালিয়ে_যাও (continue)
+
+# print only odd numbers up to 5, stop after 5
+ধরি i = ০;
+যতক্ষণ (সত্য) {
+    i = i + ১;
+    যদি (i > ৫) {
+        থামো;
+    }
+    যদি (i % ২ == ০) {
+        চালিয়ে_যাও;
+    }
+    লিখ i;
+}
+লিখ "শেষ";
+
+# break inside a for loop too
+জন্য (ধরি k = ১; k <= ১০; k = k + ১) {
+    যদি (k == ৪) {
+        থামো;
+    }
+    লিখ k;
+}

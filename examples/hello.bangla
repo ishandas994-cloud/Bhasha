@@ -1,0 +1,27 @@
+# হ্যালো ওয়ার্ল্ড - BanglaLang demo
+
+ধরি নাম = "দুনিয়া";
+লিখ "হ্যালো, " + নাম + "!";
+
+# Functions
+ফাংশন যোগ(a, b) {
+    ফেরত a + b;
+}
+লিখ "১০ + ৩২ = " + যোগ(১০, ৩২);
+
+# Conditionals
+ধরি সংখ্যা = ৭৫;
+যদি (সংখ্যা >= ৮০) {
+    লিখ "গ্রেড: A+";
+} নাহলে {
+    লিখ "গ্রেড: A";
+}
+
+# Loops
+# Note: update counters with plain assignment (i = ...), not ধরি -
+# ধরি declares a NEW variable in the loop's block scope each pass.
+ধরি i = ১;
+যতক্ষণ (i <= ৫) {
+    লিখ "গণনা: " + i;
+    i = i + ১;
+}

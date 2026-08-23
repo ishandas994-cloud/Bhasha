@@ -1,0 +1,22 @@
+# পরীক্ষা ১১: Bengali script handling - conjuncts, vowel signs, numerals
+
+# conjuncts (যুক্তাক্ষর)
+ধরি যুক্ত = "ক্ষ";
+লিখ "যুক্তাক্ষর: " + যুক্ত;
+
+# full word with hasanta conjuncts
+ধরি শব্দ = "বিদ্যালয়";
+লিখ শব্দ;
+
+# vowel signs (কার) attached to consonants
+ধরি শব্দ২ = "আমি";
+লিখ শব্দ২;
+
+# Bengali numerals in arithmetic
+ধরি সংখ্যা = ২৫.৫;
+লিখ সংখ্যা;
+লিখ ৫০ - ২৫.৫;
+
+# mixed Bengali variable names
+ধরি নাম২ = "টেস্ট";
+লিখ নাম২ + " সফল";

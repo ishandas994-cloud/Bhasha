@@ -25,6 +25,8 @@ Write code like this:
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
+- [Download & Install](#download--install)
+- [CLI Usage](#cli-usage)
 - [API Reference](#api-reference)
 - [Language Reference](#language-reference)
 - [Error Handling](#error-handling)
@@ -74,28 +76,35 @@ The backend exposes this pipeline over HTTP, and the frontend is a single-page p
 
 ```
 bangla-lang/
-├── backend/                        # Spring Boot interpreter API
-│   ├── pom.xml                     # Maven build configuration
+├── backend/                        # Spring Boot interpreter API + CLI
+│   ├── pom.xml                     # Maven build (default: web, -Pcli: CLI jar)
+│   ├── Dockerfile                  # Container build for the web API
 │   └── src/main/java/com/banglalang/
 │       ├── lexer/                  # Tokenizer (Token, TokenType, Lexer)
 │       ├── parser/                 # Parser + AST definitions (Stmt, Expr)
 │       ├── interpreter/            # Tree-walking interpreter + environment
+│       ├── cli/                    # CliMain — standalone `bangla` command
 │       ├── api/                    # REST layer (/api/run), CORS config
-│       └── Main.java               # CLI entry point
+│       └── Main.java               # Spring Boot entry point
 │   └── src/main/resources/
-│       └── application.properties  # Server config (port 8081)
+│       └── application.properties  # Server config (port from $PORT)
 │
 ├── frontend/                       # React playground
 │   ├── package.json
+│   ├── vercel.json                 # Vercel deploy config (Vite)
 │   ├── vite.config.js              # Dev proxy: /api → localhost:8081
 │   └── src/
 │       ├── editor/                 # CodeMirror setup, Bangla grammar, autocomplete
-│       ├── keyboard/               # Virtual Bangla keyboard + phonetic map
+│       ├── keyboard/               # Virtual Bangla keyboard (neon glass UI)
 │       ├── components/             # Output panel
 │       ├── api/                    # runCode.js — fetch wrapper for /api/run
 │       └── App.jsx                 # Playground layout
 │
-├── package.json                    # Root helper deps (mvn runner)
+├── examples/
+│   └── hello.bangla                # Runnable demo program for the CLI
+├── scripts/                        # Local CLI build scripts (Windows/Linux/macOS)
+├── .github/workflows/release.yml   # Release pipeline → GitHub Releases
+├── package.json                    # Root helper deps
 └── README.md
 ```
 
@@ -117,8 +126,8 @@ Make sure you have the following installed:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/ishandas994-cloud/bangla-lang.git
-cd bangla-lang
+git clone https://github.com/ishandas994-cloud/Bhasha.git
+cd Bhasha
 ```
 
 ### 2. Start the backend (port 8081)
@@ -150,6 +159,164 @@ npm run dev
 Then open **http://localhost:5173** in your browser.
 
 > During development, Vite automatically proxies all `/api/*` requests to the backend at `localhost:8081` — no manual URL or CORS setup needed.
+
+## Download & Install
+
+BanglaLang ships as a standalone CLI — download one binary, put it on your `PATH`, and run programs. **No Java installation required** (the native packages bundle their own runtime).
+
+### Downloads
+
+All builds are produced automatically by GitHub Actions and published on the [Releases](https://github.com/ishandas994-cloud/Bhasha/releases) page. These links always fetch the **latest** release:
+
+| Platform | Download | Size |
+|----------|----------|------|
+| Windows 10/11 (x64) | [bangla-windows-x64.zip](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-windows-x64.zip) | ~47 MB |
+| Linux (x64) | [bangla-linux-x64.tar.gz](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-linux-x64.tar.gz) | ~45 MB |
+| macOS (Apple Silicon) | [bangla-macos-aarch64.tar.gz](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-macos-aarch64.tar.gz) | ~45 MB |
+| Any OS with Java 17+ | [bangla-lang-cli.jar](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-lang-cli.jar) | ~30 KB |
+
+> Older versions are available on the [full releases list](https://github.com/ishandas994-cloud/Bhasha/releases).
+
+### Setup Guide — Windows
+
+1. **Download** `bangla-windows-x64.zip` from the table above.
+2. **Extract** it — you get a folder named `bangla` containing `bangla.exe`:
+
+   ```powershell
+   Expand-Archive .\Downloads\bangla-windows-x64.zip -DestinationPath C:\Tools\
+   ```
+
+3. **Add it to PATH** so you can type `bangla` from anywhere (pick one):
+   - *GUI:* Settings → search "environment variables" → Edit the user `Path` → New → `C:\Tools\bangla`
+   - *PowerShell (permanent for your user):*
+
+     ```powershell
+     [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Tools\bangla", "User")
+     ```
+
+4. **Open a new terminal** (PATH changes only apply to fresh terminals) and verify:
+
+   ```powershell
+   bangla --version
+   # BanglaLang 1.0.0
+   ```
+
+*Don't want to touch PATH?* Just call the exe by its full path: `C:\Tools\bangla\bangla.exe run hello.bangla`
+
+### Setup Guide — Linux
+
+```bash
+# 1. Download & extract
+wget https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-linux-x64.tar.gz
+tar -xzf bangla-linux-x64.tar.gz
+
+# 2. Install to a directory on PATH
+sudo mv bangla/bin/bangla /usr/local/bin/
+
+# 3. Verify
+bangla --version
+```
+
+### Setup Guide — macOS (Apple Silicon)
+
+```bash
+# 1. Download & extract
+curl -LO https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-macos-aarch64.tar.gz
+tar -xzf bangla-macos-aarch64.tar.gz
+
+# 2. Install to a directory on PATH
+sudo mv bangla/bin/bangla /usr/local/bin/
+chmod +x /usr/local/bin/bangla
+
+# 3. If Gatekeeper blocks the unsigned binary:
+xattr -d com.apple.quarantine /usr/local/bin/bangla 2>/dev/null || true
+
+# 4. Verify
+bangla --version
+```
+
+### Alternative — the plain jar (any OS)
+
+If you already have Java 17+ installed, skip the native bundles entirely:
+
+```bash
+java -jar bangla-lang-cli.jar run hello.bangla
+```
+
+Handy as a shell alias: `alias bangla='java -jar ~/tools/bangla-lang-cli.jar'`
+
+## CLI Usage
+
+### Commands
+
+```
+bangla run <file.bangla>    বাংলা প্রোগ্রাম চালান — execute a program
+bangla --version, -v        সংস্করণ দেখান — show version
+bangla --help, -h           এই বার্তা দেখান — show help
+```
+
+### Your first program
+
+1. Create a file named `hello.bangla` (UTF-8 encoding):
+
+   ```bangla
+   ধরি নাম = "পৃথিবী";
+   লিখ "নমস্কার, " + নাম + "!";
+
+   ধরি i = ১;
+   যতক্ষণ (i <= ৩) {
+       লিখ "সংখ্যা: " + i;
+       i = i + ১;
+   }
+   ```
+
+2. Run it:
+
+   ```
+   $ bangla run hello.bangla
+   নমস্কার, পৃথিবী!
+   সংখ্যা: ১
+   সংখ্যা: ২
+   সংখ্যা: ৩
+   ```
+
+3. Explore more features in [`examples/hello.bangla`](examples/hello.bangla) — functions (`ফাংশন`), conditionals (`যদি`/`নাহলে`), and loops.
+
+> **Editor tip:** save files with UTF-8 encoding (the default in VS Code / Notepad++) or Bengali text will corrupt.
+
+### Exit codes (for scripts & CI)
+
+| Code | Meaning |
+|------|---------|
+| `0`  | Program ran successfully |
+| `64` | Bad command-line usage |
+| `65` | Lexing/parsing error in the source |
+| `66` | Input file missing or unreadable |
+| `70` | Runtime error during execution |
+
+Example — run tests only if the program compiles cleanly:
+
+```bash
+bangla run main.bangla && echo "OK" || echo "FAILED with code $?"
+```
+
+### Building from source
+
+Requires JDK 17+. Maven is used if available; otherwise plain `javac`.
+
+```bash
+git clone https://github.com/ishandas994-cloud/Bhasha.git
+cd Bhasha
+
+./scripts/build-cli.sh              # Linux/macOS  (--native → bundled launcher tarball)
+.\scripts\build-cli.ps1             # Windows      (-Native → jpackage .exe zip)
+```
+
+The jar lands at `backend/target/bangla-lang-cli.jar`. Release artifacts are cut automatically when a `v*` tag is pushed — see [`.github/workflows/release.yml`](.github/workflows/release.yml).
+
+### How it works
+
+The CLI is the same interpreter core that powers the web playground, with Spring Boot compiled out entirely (`mvn -Pcli package`). `jpackage` then wraps that jar with a trimmed JRE into a self-contained folder per platform — which is what gets zipped into the release artifacts.
 
 ## API Reference
 
@@ -260,9 +427,11 @@ Content-Type: application/json
 ধরি i = ১;
 যতক্ষণ (i <= ৫) {
     লিখ i;
-    ধরি i = i + ১;
+    i = i + ১;    # plain assignment updates the existing variable
 }
 ```
+
+> **`ধরি` vs bare assignment:** `ধরি x = ...` *declares* a new variable in the current scope — inside a loop body, that shadows the outer `x`, so the counter would never advance. Use bare assignment (`x = ...`) to update an existing variable.
 
 **Functions**
 
@@ -290,8 +459,8 @@ Partial program output produced *before* a runtime error is preserved in the res
 
 - [ ] Arrays / lists (`তালিকা`)
 - [ ] String manipulation built-ins
-- [ ] Comments in Bangla (`#` or `//`)
-- [ ] Standalone CLI runner (`bangla run file.bangla`)
+- [x] Comments in Bangla (`#`)
+- [x] Standalone CLI runner (`bangla run file.bangla`) — see [Download & Install](#download--install)
 - [ ] Standard library (`গণিত`, `সময়`)
 - [ ] Online sharing of runnable snippets
 

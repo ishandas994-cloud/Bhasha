@@ -69,21 +69,21 @@ export default function VirtualKeyboard({ onInsert, onBackspace }) {
 
   return (
     <div className="virtual-keyboard" role="group" aria-label="Bengali keyboard">
-      <div className="vk-section-label">স্বরবর্ণ (Vowel letters - start a word with these)</div>
+      <div className="vk-section-label vk-label-vowels">স্বরবর্ণ (Vowel letters - start a word with these)</div>
       <div className="vk-row vk-row-vowels">{VOWEL_LETTERS.map((g) => key(g))}</div>
 
-      <div className="vk-section-label">কার (Vowel signs - attach these AFTER a consonant)</div>
+      <div className="vk-section-label vk-label-signs">কার (Vowel signs - attach these AFTER a consonant)</div>
       <div className="vk-row vk-row-signs">
         {VOWEL_SIGNS.map((v) => key(v.glyph, v.label))}
       </div>
 
-      <div className="vk-section-label">ব্যঞ্জনবর্ণ (Consonants)</div>
+      <div className="vk-section-label vk-label-consonants">ব্যঞ্জনবর্ণ (Consonants)</div>
       <div className="vk-row vk-row-consonants">{CONSONANT_ROW_1.map((g) => key(g))}</div>
       <div className="vk-row vk-row-consonants">{CONSONANT_ROW_2.map((g) => key(g))}</div>
       <div className="vk-row vk-row-consonants">{CONSONANT_ROW_3.map((g) => key(g))}</div>
       <div className="vk-row vk-row-consonants">{CONSONANT_ROW_4.map((g) => key(g))}</div>
 
-      <div className="vk-section-label">সংখ্যা ও চিহ্ন (Digits & symbols)</div>
+      <div className="vk-section-label vk-label-digits">সংখ্যা ও চিহ্ন (Digits & symbols)</div>
       <div className="vk-row vk-row-digits">{DIGIT_ROW.map((g) => key(g))}</div>
       <div className="vk-row vk-row-symbols">{SYMBOL_ROW.map((g) => key(g))}</div>
 

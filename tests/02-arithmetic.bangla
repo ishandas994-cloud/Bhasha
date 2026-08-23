@@ -1,0 +1,15 @@
+# পরীক্ষা ০২: arithmetic operators and precedence
+ধরি a = ১০;
+ধরি b = ৩;
+
+লিখ a + b;
+লিখ a - b;
+লিখ a * b;
+লিখ a / b;
+লিখ a % b;
+
+# unary minus
+লিখ -a;
+
+# parentheses override precedence
+লিখ (a + b) * ২;

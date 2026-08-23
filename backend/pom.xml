@@ -57,4 +57,55 @@
     </plugins>
   </build>
 
+  <!--
+    CLI distribution profile: builds a dependency-free runnable jar of
+    just the language core (lexer + parser + interpreter + cli), with
+    Spring Boot and the REST layer compiled out entirely.
+
+      mvn -Pcli clean package -DskipTests
+
+    Produces target/bangla-lang-cli.jar - run with:
+      java -jar target/bangla-lang-cli.jar run program.bangla
+
+    This is the jar jpackage wraps into native launchers for releases.
+  -->
+  <profiles>
+    <profile>
+      <id>cli</id>
+      <build>
+        <finalName>bangla-lang-cli</finalName>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <excludes>
+                <exclude>com/banglalang/Main.java</exclude>
+                <exclude>com/banglalang/api/**</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <archive>
+                <manifest>
+                  <mainClass>com.banglalang.cli.CliMain</mainClass>
+                </manifest>
+              </archive>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

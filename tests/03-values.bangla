@@ -1,0 +1,16 @@
+# পরীক্ষা ০৩: value types - strings, concatenation, booleans, null
+লিখ "আবু" + "সালেহ";
+
+# number + string auto-converts to string
+লিখ "মান: " + ৪২;
+
+# non-integer division keeps decimals
+লিখ ৭ / ২;
+
+# booleans print as Bengali words
+লিখ সত্য;
+লিখ মিথ্যা;
+
+# uninitialized variables are নাল (null)
+ধরি x;
+লিখ x;
