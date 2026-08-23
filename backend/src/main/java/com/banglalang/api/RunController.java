@@ -5,7 +5,7 @@ import com.banglalang.interpreter.Interpreter;
 import com.banglalang.interpreter.RuntimeError;
 import com.banglalang.lexer.Lexer;
 import com.banglalang.lexer.Token;
-import com.banglalang.parser.ParseException;
+import com.banglalang.parser.ast.ParseException;
 import com.banglalang.parser.Parser;
 import com.banglalang.parser.ast.Stmt;
 
