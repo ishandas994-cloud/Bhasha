@@ -172,8 +172,9 @@ All builds are produced automatically by GitHub Actions and published on the [Re
 |----------|----------|------|
 | Windows 10/11 (x64) | [bangla-windows-x64.zip](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-windows-x64.zip) | ~47 MB |
 | Linux (x64) | [bangla-linux-x64.tar.gz](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-linux-x64.tar.gz) | ~45 MB |
-| macOS (Apple Silicon) | [bangla-macos-aarch64.tar.gz](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-macos-aarch64.tar.gz) | ~45 MB |
 | Any OS with Java 17+ | [bangla-lang-cli.jar](https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-lang-cli.jar) | ~30 KB |
+
+> macOS users: build from source with `./scripts/build-cli.sh --native` (see below), or run the jar with Java 17+.
 
 > Older versions are available on the [full releases list](https://github.com/ishandas994-cloud/Bhasha/releases).
 
@@ -214,24 +215,6 @@ tar -xzf bangla-linux-x64.tar.gz
 sudo mv bangla/bin/bangla /usr/local/bin/
 
 # 3. Verify
-bangla --version
-```
-
-### Setup Guide — macOS (Apple Silicon)
-
-```bash
-# 1. Download & extract
-curl -LO https://github.com/ishandas994-cloud/Bhasha/releases/latest/download/bangla-macos-aarch64.tar.gz
-tar -xzf bangla-macos-aarch64.tar.gz
-
-# 2. Install to a directory on PATH
-sudo mv bangla/bin/bangla /usr/local/bin/
-chmod +x /usr/local/bin/bangla
-
-# 3. If Gatekeeper blocks the unsigned binary:
-xattr -d com.apple.quarantine /usr/local/bin/bangla 2>/dev/null || true
-
-# 4. Verify
 bangla --version
 ```
 

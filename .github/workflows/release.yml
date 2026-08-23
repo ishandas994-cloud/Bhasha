@@ -1,15 +1,14 @@
 # .github/workflows/release.yml
 #
-# Builds the BanglaLang CLI for all three platforms and attaches the
+# Builds the BanglaLang CLI for supported platforms and attaches the
 # artifacts to a GitHub Release when a v* tag is pushed:
 #
-#   git tag v1.0.0 && git push origin v1.0.0
+#   git tag v1.0.1 && git push origin v1.0.1
 #
-# Artifacts produced per platform:
+# Artifacts produced:
 #   - bangla-lang-cli.jar          (pure Java, runs anywhere with Java 17+)
 #   - bangla-windows-x64.zip       self-contained, no Java needed
 #   - bangla-linux-x64.tar.gz      self-contained, no Java needed
-#   - bangla-macos-aarch64.tar.gz  self-contained, no Java needed
 
 name: Release
 
@@ -33,9 +32,6 @@ jobs:
             compress: zip
           - os: ubuntu-latest
             artifact: bangla-linux-x64
-            compress: tar
-          - os: macos-latest
-            artifact: bangla-macos-aarch64
             compress: tar
     runs-on: ${{ matrix.os }}
     defaults:
@@ -108,5 +104,4 @@ jobs:
           files: |
             artifacts/bangla-windows-x64.zip
             artifacts/bangla-linux-x64.tar.gz
-            artifacts/bangla-macos-aarch64.tar.gz
             artifacts/bangla-lang-cli.jar

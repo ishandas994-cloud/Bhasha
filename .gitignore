@@ -1,22 +1,39 @@
 # ---------- Dependencies ----------
 node_modules/
-frontend/node_modules/
 
 # ---------- Build outputs ----------
-frontend/dist/
 dist/
 build/
-
-# ---------- Java / Maven ----------
+out/
+frontend/dist/
 backend/target/
 target/
+sources.txt
+
+# ---------- Java ----------
 *.class
-*.jar
-*.war
-*.ear
-*.log
 hs_err_pid*
 replay_pid*
+*.hprof
+
+# ---------- Maven metadata ----------
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+dependency-reduced-pom.xml
+.flattened-pom.xml
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# ---------- Release packages ----------
+# Built binaries/zips are published via GitHub Releases, never committed
+*.zip
+*.tar.gz
+*.msi
+*.dmg
+*.deb
+*.rpm
 
 # ---------- Environment variables ----------
 .env
@@ -30,6 +47,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+*.tmp
 
 # ---------- IDE / Editor ----------
 .vscode/
@@ -48,6 +66,7 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+~$*
 
 # ---------- Misc ----------
 *.swp
